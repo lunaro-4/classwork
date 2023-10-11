@@ -1,6 +1,12 @@
 import java.util.List;
 
 /*          09.10.2023      */
+
+//!!WIP!! Решение задачи "Объединение блоков"
+//https://acmp.ru/index.asp?main=task&id_task=553
+
+
+
 public class Block {
 
     private int[][] blocks;

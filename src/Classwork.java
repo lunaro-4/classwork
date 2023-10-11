@@ -1,22 +1,12 @@
-import com.sun.source.tree.Tree;
-
 import java.util.*;
 
 public class Classwork {
     public static void main(String[] args) {
-        //Robot.robotMovement("LSSSS");
-        //int[] a = {1,5,3,2};
         //bankomat(16765, a);
         //compare(userInput());
-        //Robot r =new Robot("LSSLLSSS");
-        //Dot aDot = new Dot(1, 14);
-        //Dot bDot = new Dot(12, 8);
-        //Dot cDot = new Dot(14, 3);
-        //Dot.area(aDot,bDot,cDot);
-        //Robot2 r2 =new Robot2("LSSLLSSS");
+        //findNum(new int[]{1,3,2,4,5,2,5,5,1}, 2);
         Trees tree = new Trees(5,3);
         System.out.println(tree.chopTrees());
-        //findNum(new int[]{1,3,2,4,5,2,5,5,1}, 2);
     }
 
 

@@ -1,12 +1,18 @@
 /*              07.10.2023          */
 
-
+// Решение задачи "Робот К-79" с помощью матрицы
+// https://acmp.ru/index.asp?main=task&id_task=235
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Robot2 {
+
+    public static void main(String[] args){
+        Robot2 r2 =new Robot2("LSSLLSSS");
+    }
+
     private int direction = 0, moves = 0, target = -1;
     private boolean[][] coordinateMap = new boolean[101][101];
     private int[] robotCoordinate = {50,50};

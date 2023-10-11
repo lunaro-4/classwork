@@ -1,7 +1,17 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 /*      09.10.2023      */
+
+
+
+// Решение задачи "Вырубка деревьев"
+// https://acmp.ru/index.asp?main=task&id_task=24
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
 public class Trees {
 	public static void main(String[] args){
 		Trees tree = new Trees(5,3);

@@ -1,5 +1,15 @@
 /*		08.10.2023		*/
+
+//Задание из класса: Класс с точками и функцией нахождения площади треугольника
+
 public class Dot{
+
+	public static void main(String[] args){
+		Dot aDot = new Dot(1, 14);
+		Dot bDot = new Dot(12, 8);
+		Dot cDot = new Dot(14, 3);
+		Dot.area(aDot,bDot,cDot);
+	}
 
 	public Dot(int x, int y){
 		this.x = x;

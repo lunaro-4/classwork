@@ -1,10 +1,20 @@
 /*              07.10.2023          */
 
+// Решение задачи "Робот К-79" с помощью очереди координат
+// https://acmp.ru/index.asp?main=task&id_task=235
+
+
+
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Robot {
+    public static void main(String[] args){
+        Robot2 r1 =new Robot2("LSSLLSSS");
+    }
     private int direction = 0, moves = 0, target = -1;
     private int[] coordinates = {0, 0};
     private List<int[]> uniqueCoords = new ArrayList<>();

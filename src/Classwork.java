@@ -1,12 +1,17 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Classwork {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         //bankomat(16765, a);
         //compare(userInput());
         //findNum(new int[]{1,3,2,4,5,2,5,5,1}, 2);
-        Trees tree = new Trees(5,3);
-        System.out.println(tree.chopTrees());
+        //Trees tree = new Trees(5,3);
+        //System.out.println(tree.chopTrees());
+        //findDuplicate(new int[]{1,2,1,4,2,5,7,8,9,10,1});
+        //arrCountUnique(new int[]{1,3,4,1,1,2,3,6});
+        triangleFromFile("tri.txt");
     }
 
 
@@ -101,5 +106,43 @@ public class Classwork {
         }
         System.out.println(n);
     }
+
+    /*      12.10.2023      */
+
+    public static void findDuplicate(int[] arr){
+        int counter =0;
+        boolean[] used = new boolean[arr.length];
+        for (int i=0; i<arr.length;i++ ){
+            for (int j = i+1;j<arr.length;j++){
+                if (arr[i] == arr[j] && !used[j]){
+                    used[j] = true;
+                    used[i] = true;
+                }
+            }
+        }
+        for (int i=0; i<used.length; i++) {
+            if (used[i])
+                counter++;
+        }
+        System.out.println(counter);
+    }
+
+    public static void arrCountUnique(int[] arr){
+        Set<Integer> set = new TreeSet<>();
+        for (int i=0; i<arr.length; i++)
+            set.add(arr[i]);
+        System.out.println(set.size());
+    }
+
+    public static void triangleFromFile(String filename) throws FileNotFoundException {
+        Scanner sc = new Scanner(new File(filename));
+        int p = 0;
+        for (int i=0; i<3;i++) {
+            p+=sc.nextInt();
+        }
+        System.out.println(p);
+
+    }
+
 
 }

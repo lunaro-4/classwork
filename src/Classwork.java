@@ -15,8 +15,6 @@ public class Classwork {
     }
 
 
-    //  todo: К пятнице 13.10.23 быстрая сортировка Хоара, реализация
-    //  todo: задача о восьми ферзях
 
 
 
@@ -144,5 +142,13 @@ public class Classwork {
 
     }
 
+    public static int[] generateArray(int start, int end, int n){
+        int [] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            int x = (int) (Math.random()*end)-start;
+            arr[i] = x;
+        }
+        return arr;
+    }
 
 }

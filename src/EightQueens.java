@@ -9,29 +9,38 @@ import java.util.Random;
 public class EightQueens {
     public static void main(String[] args) throws Exception {
         EightQueens e = new EightQueens();
-        int iter =0;
-        e.fieldSize =10;
-        while (e.queenArray.size() < e.fieldSize && iter<100) {
+        e.fieldSize = 8;
+        //attempt1(e);
+        e.field = new boolean[e.fieldSize][e.fieldSize];
+        findFirstSolution(e, 0);
+        for (int n = 0; n < e.queenArray.size(); n++)
+            System.out.println(e.queenArray.get(n)[0] + "" + e.queenArray.get(n)[1]);
+
+    }
+
+    public static void attempt1(EightQueens e) throws Exception {
+        int iter = 0;
+        while (e.queenArray.size() < e.fieldSize && iter < 100) {
             e.field = new boolean[e.fieldSize][e.fieldSize];
             e.queenArray.clear();
-            findAnySolution2(e);
+            findAnySolution(e);
             iter++;
             System.out.println(iter + " Iterations");
             for (int n = 0; n < e.queenArray.size(); n++)
-                System.out.print(e.queenArray.get(n)[0] + "" + e.queenArray.get(n)[1]+"  ");
+                System.out.print(e.queenArray.get(n)[0] + "" + e.queenArray.get(n)[1] + "  ");
             System.out.println();
         }
         System.out.println(iter + " Iterations");
-        if (iter<100) {
+        if (iter < 100) {
             for (int n = 0; n < e.queenArray.size(); n++)
                 System.out.println(e.queenArray.get(n)[0] + "" + e.queenArray.get(n)[1]);
-        }else System.out.println("No solution");
+        } else System.out.println("No solution");
     }
 
 
     boolean[][] field;
     List<Object[]> queenArray = new ArrayList<>();
-    int fieldSize =8;
+    int fieldSize = 8;
 
     public static int merge(boolean[][] main, boolean[][] append) {
         int counter = 0;
@@ -42,6 +51,7 @@ public class EightQueens {
                 if (main[i][j])
                     counter++;
             }
+
         }
         //System.out.println(counter);
         return counter;
@@ -65,17 +75,52 @@ public class EightQueens {
     }
 
 
-    public static void findAnySolution2(EightQueens inp) throws Exception {
+    public static void findAnySolution(EightQueens inp) throws Exception {
         List<Object[]> arr = inp.queenArray;
-        if (arr.size() <= inp.fieldSize-1) {
+        if (arr.size() <= inp.fieldSize - 1) {
             for (int i = 0; i < 1000; i++) {
-                searchLoopRandom2(inp);
+                searchLoopRandom(inp);
             }
         }
     }
 
+    public static boolean findFirstSolution(EightQueens inp, int row) {
+        boolean[][] snap = new boolean[inp.fieldSize][inp.fieldSize];
+        copyMatrix(inp.field, snap);
+        if (row < inp.fieldSize) {
+            for (int i = 0; i < inp.fieldSize; i++) {
+                if (inp.field[row][i]) {
+                    ;
+                } else {
+                    Queen q = new Queen(row, i, inp.fieldSize);
+                    inp.queenArray.add(new Object[]{q.posXLiteral, q.posY});
+                    merge(inp.field, q.field);
+                    if (findFirstSolution(inp, row + 1))
+                        return true;
+                    else {
+                        inp.queenArray.remove(inp.queenArray.size() - 1);
 
-    public static boolean searchLoopRandom2(EightQueens inp) throws Exception {
+                        copyMatrix(snap,inp.field);
+                        //return false;
+                    }
+                }
+                //return false;
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+   public static void copyMatrix(boolean[][] in, boolean[][] out){
+       for (int i = 0; i < in.length; i++) {
+           for (int j = 0; j < in[i].length; j++) {
+               out[i][j] = in[i][j];
+           }
+       }
+   }
+
+    public static boolean searchLoopRandom(EightQueens inp) throws Exception {
 
         for (int i = 0; i < 1000; i++) {
             Queen q = Queen.generateRandomQueen(inp.field.length);
@@ -86,28 +131,15 @@ public class EightQueens {
             }
         }
         return false;
-    }public static boolean searchLoopRandom1(List<Object[]> arr, boolean[][] solutionField, int fieldSize) throws Exception {
-
-        for (int i = 0; i < 1000; i++) {
-            Queen q = Queen.generateRandomQueen(fieldSize);
-            if (!solutionField[q.posX][q.posY]) {
-                arr.add(new Object[]{q.posXLiteral, q.posY});
-                merge(solutionField, q.field);
-                return true;
-            }
-        }
-        return false;
     }
-
-
 }
 class Queen extends EightQueens {
     int posX, posY;
     char posXLiteral;
 
-    public Queen(int x, int y, int fieldSize) throws Exception {
-        if (x < 0 || y < 0)
-            throw new Exception("Exception message");
+    public Queen(int x, int y, int fieldSize) {
+        if (x < 0 || y < 0);
+        //    throw new Exception("Exception message");
         this.posX = x;
         this.posY = y;
         this.field = strikes(this, fieldSize);

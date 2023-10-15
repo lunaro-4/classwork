@@ -15,8 +15,16 @@ public class EightQueens {
         findFirstSolution(e, 0);
         for (int n = 0; n < e.queenArray.size(); n++)
             System.out.println(e.queenArray.get(n)[0] + "" + e.queenArray.get(n)[1]);
-
+		System.out.println(e.solutionCounter);
     }
+
+
+
+    boolean[][] field;
+    List<Object[]> queenArray = new ArrayList<>();
+    int fieldSize = 8;
+	int solutionCounter =0;
+
 
     public static void attempt1(EightQueens e) throws Exception {
         int iter = 0;
@@ -37,10 +45,6 @@ public class EightQueens {
         } else System.out.println("No solution");
     }
 
-
-    boolean[][] field;
-    List<Object[]> queenArray = new ArrayList<>();
-    int fieldSize = 8;
 
     public static int merge(boolean[][] main, boolean[][] append) {
         int counter = 0;
@@ -66,7 +70,6 @@ public class EightQueens {
                     System.out.print("11 ");
                 else
                     System.out.print("__ ");
-
 
             }
             System.out.println("");
@@ -108,7 +111,8 @@ public class EightQueens {
             }
             return false;
         }
-        return true;
+		inp.solutionCounter++;
+        return false;
     }
 
 

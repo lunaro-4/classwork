@@ -1,14 +1,16 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Scanner;
-
+import java.io.IOException;
 //  https://acmp.ru/index.asp?main=task&id_task=469
+
+
 public class ChemAlert {
-
-
-    public static void main(String[] args) throws FileNotFoundException {
-        String filename="ChemInput2.txt";
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        String filename="INPUT.TXT";
         Scanner sc = new Scanner(new File(filename));
         int yLength = sc.nextInt();
         int xLength = sc.nextInt();
@@ -55,6 +57,8 @@ public class ChemAlert {
             System.out.println(Arrays.toString(visitMap[i]));
         }
         System.out.println("\n"+"Ответ: "+costMap[yLength-1][xLength-1]);
+		String s = String.valueOf(costMap[yLength-1][xLength-1]);
+		Files.write(Path.of("OUTPUT.TXT"), s.getBytes());
     }
 
     private static void printMap(int[][] costMap) {

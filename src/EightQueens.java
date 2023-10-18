@@ -20,7 +20,7 @@ public class EightQueens {
         EightQueens e = new EightQueens();
         e.fieldSize = 8;            // изменить для другого размера доски
         String filename = "solutions";
-        File file =new File("filename");
+        File file =new File(filename);
         if (file.exists())
             file.delete();
         Files.write(Path.of(filename), "".getBytes());
@@ -99,7 +99,7 @@ public class EightQueens {
         for (int n = 0; n < inp.queenArray.size(); n++)
             s += inp.queenArray.get(n)[0] + "" + inp.queenArray.get(n)[1] + "   ";
         s += "\n";
-        Files.write(Path.of("solutions"), s.getBytes(), StandardOpenOption.APPEND);
+        Files.write(Path.of("solutions"), s.getBytes(),StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         return false;
     }
 

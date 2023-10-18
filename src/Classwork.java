@@ -1,9 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class Classwork {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         //bankomat(16765, a);
         //compare(userInput());
         //findNum(new int[]{1,3,2,4,5,2,5,5,1}, 2);
@@ -11,12 +15,33 @@ public class Classwork {
         //System.out.println(tree.chopTrees());
         //findDuplicate(new int[]{1,2,1,4,2,5,7,8,9,10,1});
         //arrCountUnique(new int[]{1,3,4,1,1,2,3,6});
-        triangleFromFile("tri.txt");
+        //triangleFromFile("tri.txt");
+
+        for (int i = 0; i < 10;i++) {
+            int [][] matr = generateMatrix(10,10,0, 100);
+            String s = i+" matrix.txt";
+            printIntMatrixToFile(matr,s);
+        }
+        for (int i = 0; i < 10; i++) {
+            String inp = i+" matrix.txt";
+            String outp = i+" ans.txt";
+            ChemAlert2.findLastCost(inp, outp);
+        }
     }
 
 
 
 
+    public static void printIntMatrixToFile(int[][] matr, String filename) throws IOException {
+        String s =matr.length + " "+ matr[0].length+ "\n";
+
+        for (int n = 0; n < matr.length; n++)
+            s+= Arrays.toString(matr[n]).replace('[',' ').replace(']',' ').replace(',','\t') + "\n";
+           // s += inp.queenArray.get(n)[0] + "" + inp.queenArray.get(n)[1] + "   ";
+        s += "\n";
+        Files.write(Path.of(filename), s.getBytes(),StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+
+    }
 
     private static void bankomat(int value, int[] haveTickets) {
         int tickets = value;
@@ -149,6 +174,14 @@ public class Classwork {
             arr[i] = x;
         }
         return arr;
+    }
+    public static int[][] generateMatrix(int y, int x, int start, int end){
+        int[][] matr = new int[y][x];
+        for (int i = 0; i < y; i++) {
+            int[] arr = generateArray(start,end,x);
+            matr[i] = arr;
+        }
+       return matr;
     }
 
 }

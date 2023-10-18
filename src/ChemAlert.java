@@ -5,11 +5,12 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.IOException;
+
 //  https://acmp.ru/index.asp?main=task&id_task=469
 
 
 public class ChemAlert {
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    private static void main(String[] args) throws FileNotFoundException, IOException {
         String filename="INPUT.TXT";
         Scanner sc = new Scanner(new File(filename));
         int yLength = sc.nextInt();
@@ -67,7 +68,7 @@ public class ChemAlert {
         }
     }
 
-    public static boolean checkMovement(int[] directionCost){
+    private static boolean checkMovement(int[] directionCost){
         int[] test = new int[4];
         Arrays.fill(test, 9999);
         int counterTest =0;
@@ -166,7 +167,7 @@ public class ChemAlert {
             stuckFlag = true;
         return stuckFlag;
     }
-    public static int[][] readInput(String filename) throws FileNotFoundException {
+    private static int[][] readInput(String filename) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(filename));
         int y = sc.nextInt();
         int x = sc.nextInt();

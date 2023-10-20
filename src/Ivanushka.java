@@ -13,43 +13,41 @@ public class Ivanushka {
         Solution s = new Solution();
         //convert(nodeMap);
 //        System.out.println(findSolution(nodeMap, 0, 1, s));
+        findSolution(nodeMap, nodeMap.length-1, 0,s,-1);
+        System.out.println("Ответ: " +s.minPath);
 
     }
 
     private static int findSolution(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex) {
-        if (layerIndex>0){
-            int minValue = prevNodesCost;
-            if ( nodeIndex == 0) {
+        if (layerIndex>=0){
+            int snap = s.curPath;
+            if ( nodeIndex == -1) {
                 nodeIndex = nodeMap[layerIndex].nodeList.length - 1;
-                for (; nodeIndex >0; nodeIndex--) {
+                for (; nodeIndex >=0; nodeIndex--) {
                     for (int j = 0; j < nodeMap[layerIndex].nodeList[nodeIndex].connectionList.size(); j++) {
-                        prevNodesCost +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).cost;
-                        findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).prevNodeIndex );
-                        prevNodesCost =minValue;
+                        s.curPath +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).cost;
+                        System.out.println(""+layerIndex + "  "+ nodeIndex+ "  "+ s.curPath);
+                        findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).prevNodeIndex-1 );
+                        s.curPath = snap;
 
                     }
 
                 }
             } else{
                 for (int j = 0; j < nodeMap[layerIndex].nodeList[nodeIndex].connectionList.size(); j++) {
-                    prevNodesCost +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).cost;
-                    findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).prevNodeIndex );
-                    prevNodesCost =minValue;
+                    s.curPath +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).cost;
+                    System.out.println(""+layerIndex + "  "+ nodeIndex+ "  "+ s.curPath);
+                    findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).prevNodeIndex-1 );
+                    s.curPath = snap;
 
             }
             }
+        }else {
+            System.out.println("\t" + s.curPath + "  " + s.minPath);
+            if (s.curPath < s.minPath)
+                s.minPath = s.curPath;
         }
-        if (prevNodesCost < s.path)
-            s.path = prevNodesCost;
-        return s.path;
-
-//        if (layerIndex<nodeMap.length-1){
-//            minValue += findSolution(nodeMap,layerIndex-1,prevNodesCost,s);
-//            s.path = minValue;
-//        } else
-//            s.path += minValue;
-//
-//        return minValue;
+        return 0;
     }
     private static void convert2(Layer[] nodeMap){
         int counter = 0;
@@ -104,6 +102,14 @@ public class Ivanushka {
 
     }
 
+
+private static void checkNode(){
+
+}
+
+
+
+
     private static Layer[] readFromFile(String filename)throws IOException{
         Scanner sc = new Scanner(new File(filename));
         int layers = sc.nextInt();
@@ -152,7 +158,8 @@ public class Ivanushka {
 
 
 class Solution{
-    int path = 0;
+    int minPath = 0;
+    int curPath = 0;
 
 }
 

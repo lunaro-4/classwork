@@ -10,19 +10,27 @@ public class Ivanushka {
     public static void main(String[] args) throws IOException {
 //        System.out.println(Arrays.deepToString(readFromFile("INPUT.TXT")));
         Layer[] nodeMap = readFromFile("INPUT.TXT");
+//        System.out.println(Arrays.toString(nodeMap));
+
         Solution s = new Solution();
-        //convert(nodeMap);
-//        System.out.println(findSolution(nodeMap, 0, 1, s));
-        findSolution(nodeMap, nodeMap.length-1, 0,s,-1);
+        findSolution1(nodeMap, nodeMap.length-1, 0,s,-1);
+        int [][] adjMatr = convert2(nodeMap);
         System.out.println("Ответ: " +s.minPath);
+
+        int[] costToNodes = findSolution2(adjMatr);
+        int minValue = Integer.MAX_VALUE;
+        for (int i =costToNodes.length-1; i >costToNodes.length- nodeMap[nodeMap.length-1].nodeList.length; i--) {
+            minValue = Math.min(minValue, costToNodes[i]);
+        }
+        System.out.println("Ответ: " + minValue);
+
 
     }
 
-    private static int findSolution(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex) {
+    private static int findSolution1(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex) {
         if (layerIndex>=0){
             if ( nodeIndex == -1) {
-                nodeIndex = nodeMap[layerIndex].nodeList.length - 1;
-                for (; nodeIndex >=0; nodeIndex--) {
+                for (nodeIndex = nodeMap[layerIndex].nodeList.length - 1; nodeIndex >=0; nodeIndex--) {
                     for (int j = 0; j < nodeMap[layerIndex].nodeList[nodeIndex].connectionList.size(); j++) {
                         checkConnection(nodeMap,layerIndex,prevNodesCost,s,nodeIndex,j);
                     }
@@ -39,28 +47,78 @@ public class Ivanushka {
         }
         return 0;
     }
-    private static void convert2(Layer[] nodeMap){
-        //converts nodeMap to adjacency matrix
+
+
+    private static int[] findSolution2(int[][] adjMatr){
+        int[] costToNode = new int[adjMatr[0].length];
+        Arrays.fill(costToNode, 999999);
+        for (int i = 1; i < adjMatr.length; i++) {
+            for (int j = 1; j < adjMatr[i].length; j++) {
+                int minCost;
+                if (i==1)
+                    minCost = adjMatr[i][j];
+                else
+                    minCost = Math.min(costToNode[i]+adjMatr[i][j], costToNode[j]);
+
+                costToNode[j]=minCost;
+            }
+        }
+//        System.out.println(Arrays.toString(costToNode));
+        return costToNode;
+    }
+
+
+
+    private static int[][] convert2(Layer[] nodeMap){
+        //  converts nodeMap to adjacency matrix
+
+        Layer[] newMap = new Layer[nodeMap.length+1];
+        Node[] nList = new Node[1];
+        Layer l0 = new Layer(nList ,0);
+        newMap[0] = l0;
+        for (int i = 0; i < nodeMap.length; i++) {
+            newMap[i+1]=nodeMap[i];
+        }
+
         int counter = 0;
         for (int i = 0; i < nodeMap.length; i++) {
             for (int j = 0; j < nodeMap[i].nodeList.length; j++) {
                 counter++;
             }
         }
-        HashMap<String,Integer> dict = HashMap.newHashMap(counter);
-        counter =0;
-        int[][] adjMatr = new int[counter][counter-1];
-        for (int i = 1; i <= nodeMap.length; i++) {
-            for (int j = 0; j < nodeMap[i].nodeList.length; j++) {
-                int[] nArr = new int[counter];
-                for (int k = 0; k < nodeMap[i].nodeList[j].connectionList.size(); k++) {
-                    String s =""+i+'.'+j;
-                    counter++;
-                    dict.put(s, counter);
+        counter+=1;
+        HashMap<String,Integer> nameToMatrIndex = new HashMap<>();
+        // For some reason, algorythm creates -1.1 node, that does not lead anywhere,
+        // but only in y-axis. So we add 1 to x-axis to compensate.
+        int[][] adjMatr = new int[counter][counter+1];
+        for (int i = 0; i < adjMatr.length; i++) {
+            Arrays.fill(adjMatr[i], 99999);
+        }
 
+        counter =0;
+        for (int i = 0; i < newMap.length; i++) {
+            for (int j = 0; j < newMap[i].nodeList.length; j++) {
+                    String s =""+(i)+'.'+(j+1); // nodes named from 1
+                    counter++;
+                    nameToMatrIndex.put(s, counter);
+            }
+        }
+        //
+        for (int i = 1; i < newMap.length; i++) {
+            for (int j = 0; j < newMap[i].nodeList.length; j++) {
+                for (int k = 0; k < newMap[i].nodeList[j].connectionList.size(); k++) {
+                    String thisNodeName =""+i+'.'+(j+1); // nodes named from 1
+                    String toNodeName =""+(i-1)+'.'+(newMap[i].nodeList[j].connectionList.get(k).prevNodeIndex);
+                    int connectionCost = newMap[i].nodeList[j].connectionList.get(k).cost;
+                    adjMatr[nameToMatrIndex.get(toNodeName)][nameToMatrIndex.get(thisNodeName)] = connectionCost;
                 }
             }
         }
+
+//        System.out.println(nameToMatrIndex);
+//        System.out.println(Arrays.deepToString(adjMatr));
+//        ChemAlert2.printIntMatrix(adjMatr);
+        return adjMatr;
     }
 
 
@@ -98,12 +156,11 @@ public class Ivanushka {
     private static void checkConnection(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex, int connectionIndex){
         int snap = s.curPath;
         s.curPath +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(connectionIndex).cost;
-        findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(connectionIndex).prevNodeIndex-1 );
+//        System.out.println("\t"+s.curPath+"  "+nodeIndex);
+        findSolution1(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(connectionIndex).prevNodeIndex-1 );
         s.curPath = snap;
 
     }
-
-
 
 
     private static Layer[] readFromFile(String filename)throws IOException{
@@ -133,11 +190,6 @@ public class Ivanushka {
         }
         return nodeMap;
     }
-
-
-
-
-
 }
 
 
@@ -153,9 +205,14 @@ public class Ivanushka {
 
 
 
+
+
+
 class Solution{
-    int minPath = 0;
+    int minPath = Integer.MAX_VALUE;
     int curPath = 0;
+    ArrayList<Integer> solList =new ArrayList<>();
+    ArrayList<Integer> pathList =new ArrayList<>();
 
 }
 

@@ -80,31 +80,6 @@ public class Classwork {
     }
 
 
-    private static void compare(int userI){
-        if (userI > 0)
-            doSquare(userI);
-        else if (userI < 0)
-            doHalfAbs(userI);
-        else
-            System.out.println("Введен ноль");
-    }
-    private static void doHalfAbs(int a) {
-        a = Math.abs(a);
-        a /=2;
-        System.out.println("Половина модуля числа: " + a);
-    }
-    private static void doSquare(int a) {
-        a *=a;
-        System.out.println("Квадрат числа: " + a);
-    }
-    private static int userInput() {
-        System.out.print("Введите число: ");
-        Scanner scanner = new Scanner(System.in);
-        int userI = scanner.nextInt();
-        return userI;
-    }
-
-
     public static void circles(double[] a, double[] b){
         double xDistance = Math.pow((a[0] - b[0]),2);
         double yDistance = Math.pow((a[1] - b[1]),2);

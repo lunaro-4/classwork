@@ -20,36 +20,27 @@ public class Ivanushka {
 
     private static int findSolution(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex) {
         if (layerIndex>=0){
-            int snap = s.curPath;
             if ( nodeIndex == -1) {
                 nodeIndex = nodeMap[layerIndex].nodeList.length - 1;
                 for (; nodeIndex >=0; nodeIndex--) {
                     for (int j = 0; j < nodeMap[layerIndex].nodeList[nodeIndex].connectionList.size(); j++) {
-                        s.curPath +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).cost;
-                        System.out.println(""+layerIndex + "  "+ nodeIndex+ "  "+ s.curPath);
-                        findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).prevNodeIndex-1 );
-                        s.curPath = snap;
-
+                        checkConnection(nodeMap,layerIndex,prevNodesCost,s,nodeIndex,j);
                     }
-
                 }
             } else{
                 for (int j = 0; j < nodeMap[layerIndex].nodeList[nodeIndex].connectionList.size(); j++) {
-                    s.curPath +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).cost;
-                    System.out.println(""+layerIndex + "  "+ nodeIndex+ "  "+ s.curPath);
-                    findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(j).prevNodeIndex-1 );
-                    s.curPath = snap;
-
-            }
+                    checkConnection(nodeMap,layerIndex,prevNodesCost,s,nodeIndex,j);
+                }
             }
         }else {
-            System.out.println("\t" + s.curPath + "  " + s.minPath);
+//            System.out.println("\t" + s.curPath + "  " + s.minPath);
             if (s.curPath < s.minPath)
                 s.minPath = s.curPath;
         }
         return 0;
     }
     private static void convert2(Layer[] nodeMap){
+        //converts nodeMap to adjacency matrix
         int counter = 0;
         for (int i = 0; i < nodeMap.length; i++) {
             for (int j = 0; j < nodeMap[i].nodeList.length; j++) {
@@ -74,6 +65,7 @@ public class Ivanushka {
 
 
     private static void convert(Layer[] nodeMap){
+        // converts nodeMap, so connections  stored in nodes of previous layer
         Node[] nArr = new Node[1];
         Layer l = new Layer(nArr, 0);
         Layer[] newMap = new Layer[nodeMap.length];
@@ -103,9 +95,13 @@ public class Ivanushka {
     }
 
 
-private static void checkNode(){
+    private static void checkConnection(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex, int connectionIndex){
+        int snap = s.curPath;
+        s.curPath +=nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(connectionIndex).cost;
+        findSolution(nodeMap,layerIndex-1,prevNodesCost,s,nodeMap[layerIndex].nodeList[nodeIndex].connectionList.get(connectionIndex).prevNodeIndex-1 );
+        s.curPath = snap;
 
-}
+    }
 
 
 

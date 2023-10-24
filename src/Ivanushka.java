@@ -9,23 +9,26 @@ import java.util.*;
 public class Ivanushka {
     public static void main(String[] args) throws IOException {
 //        System.out.println(Arrays.deepToString(readFromFile("INPUT.TXT")));
-        Layer[] nodeMap = readFromFile("INPUT.TXT");
+        Layer[] nodeMap = readFromFile("INPUT2.TXT");
 //        System.out.println(Arrays.toString(nodeMap));
+
+//        Layer[] nodeMap = readFromConsole();
 
         Solution s = new Solution();
         findSolution1(nodeMap, nodeMap.length-1, 0,s,-1);
         int [][] adjMatr = convert2(nodeMap);
-        System.out.println("Ответ: " +s.minPath);
+        System.out.println(s.minPath);
 
         int[] costToNodes = findSolution2(adjMatr);
         int minValue = Integer.MAX_VALUE;
         for (int i =costToNodes.length-1; i >costToNodes.length- nodeMap[nodeMap.length-1].nodeList.length; i--) {
             minValue = Math.min(minValue, costToNodes[i]);
         }
-        System.out.println("Ответ: " + minValue);
+        System.out.println( minValue);
 
 
     }
+
 
     private static int findSolution1(Layer[] nodeMap, int layerIndex, int prevNodesCost, Solution s, int nodeIndex) {
         if (layerIndex>=0){
@@ -66,7 +69,6 @@ public class Ivanushka {
 //        System.out.println(Arrays.toString(costToNode));
         return costToNode;
     }
-
 
 
     private static int[][] convert2(Layer[] nodeMap){
@@ -163,6 +165,33 @@ public class Ivanushka {
     }
 
 
+    private static Layer[] readFromConsole()throws IOException{
+        Scanner sc = new Scanner(System.in);
+        int layers = sc.nextInt();
+        Layer[] nodeMap = new Layer[layers];
+        for (int i = 0; i < layers; i++) {
+            int nodesInLayer = sc.nextInt();
+            Node[] nList = new Node[nodesInLayer];
+            for (int j = 0; j < nodesInLayer; j++) {
+                List<Connection> cList = new ArrayList<>();
+                int prevNodeIndex = sc.nextInt();
+                while (prevNodeIndex!=0) {
+                    int nodeCost = sc.nextInt();
+                    Connection c = new Connection(prevNodeIndex, nodeCost);
+                    cList.add(c);
+                    prevNodeIndex = sc.nextInt();
+                }
+                Node n = new Node(cList, i);
+                nList[j] = n;
+            }
+            Layer l = new Layer(nList, i);
+            nodeMap[i] = l;
+            try {
+                String dump = sc.next();
+            } catch(Exception e) {System.out.println("End of File");}
+        }
+        return nodeMap;
+    }
     private static Layer[] readFromFile(String filename)throws IOException{
         Scanner sc = new Scanner(new File(filename));
         int layers = sc.nextInt();
